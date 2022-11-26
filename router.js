@@ -6,14 +6,15 @@ const ROUTES = {
         '/': renderHomePage,
         '/boards': getBoards,
         '/board/name': findBoardByName,
-        '/board/id': findBoardById
+        '/board/id': findBoardById,
+
     },
     POST: {
         '/board': createNewBoard,
         '/board/:id/task': createNewTask
     },
     PUT: {
-        '/board/:id/task/:id': updateTask,
+        '/board/id/task/id': updateTask,
         '/board/id': updateBoard,
     },
     DELETE: {

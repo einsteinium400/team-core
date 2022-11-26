@@ -23,9 +23,19 @@ module.exports = class TaskManagerDAL extends EventEmitter {
     setData(data) {
         this.data = data;
     }
+    setBoards(data){
+        this.data.Boards = data;
+    }
+    setTaskByBoard(boardId,data){
+        for(const board of this.data.Boards){
+            if(board.BoardId == boardId){
+                this.data.Boards.boardId = data;
+            }
+        }
+    }
 
-    updateData (payload) {
-        this.setData([...this.data, payload]);
+    updateBoards(payload) {
+        this.setBoards([...this.data.Boards, payload]);
         this.emit('updateData');
     }
 
@@ -39,5 +49,31 @@ module.exports = class TaskManagerDAL extends EventEmitter {
                 return board.Tasks
             }
         }
+    }
+    createNewBoard(payload){
+        const newID = this.data.Boards[this.data.Boards.length - 1].BoardId +1;
+
+        const newBoard = {
+            boardId: newID,
+            BoardName: payload.BoardName,
+            Tasks: []
+        }
+        this.updateBoards(newBoard);
+    }
+    createNewTask(payload,boardId){
+        console.log(boardId)
+        // console.log(payload);
+        const newID = this.data.Boards[boardId].Tasks[this.data.Boards[boardId].Tasks.length - 1].TaskId + 1;
+        const newTask = {
+            TaskId: newID,
+            TaskName: payload.TaskName,
+            TaskDetails: payload.TaskDetails,
+            Status: payload.Status,
+            Priority: payload.Priority,
+            Type: payload.Type,
+            Assignee: payload.Assignee,
+            Creator: payload.Creator
+        }
+        this.updateTaskByBoard(newTask,boardId);
     }
 }
